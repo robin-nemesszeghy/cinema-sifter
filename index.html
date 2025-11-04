@@ -5,9 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CinemaSifter</title>
     <link rel="stylesheet" href="./style.css" />
+    <script
+      src="https://kit.fontawesome.com/2e2a207e73.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="./index.js"></script>
   </head>
   <body>
-    <section class="landing">
+    <section>
       <nav>
         <div class="nav__container">
           <figure class="nav__logo">
@@ -24,9 +29,34 @@
           </figure>
           <ul class="nav__links">
             <li><a class="nav__link" href="#">Home</a></li>
-            <li><a class="nav__link" href="./film.html">Flick Fetch</a></li>
+            <li><a class="nav__link" href="./film.html">FlickFetch</a></li>
             <li><a class="nav__link nav__link--btn" href="#">CONTACT</a></li>
           </ul>
+          <button class="btn__menu" onclick="openMenu()">
+            <i class="fa-solid fa-film" aria-hidden="true"></i>
+          </button>
+          <div class="menu__backdrop">
+            <button class="btn__menu btn__menu--close" onclick="closeMenu()">
+              <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+            <ul class="menu__links">
+              <li class="menu__list">
+                <a href="#" class="menu__link" onclick="closeMenu()">Home</a>
+              </li>
+              <li class="menu__list">
+                <a
+                  href="./film.html"
+                  target="_blank"
+                  class="menu__link"
+                  onclick="closeMenu()"
+                  >Flick Fetch</a
+                >
+              </li>
+              <li class="menu__list">
+                <a href="#" class="menu__link" onclick="closeMenu()">Contact</a>
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
       <header>
@@ -39,9 +69,9 @@
                 type="text"
                 placeholder="Search by Movie Name or Keyword"
               />
-              <button>
+              <button class="input__btn">
                 <svg
-                  class="input__btn"
+                  class="input__btn--icon"
                   data-v-2a11e7ca=""
                   aria-hidden="true"
                   focusable="false"
