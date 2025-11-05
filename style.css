@@ -146,14 +146,14 @@ h2 {
   margin-bottom: 40px;
 }
 
-.input__wrapper {
+.header__input--wrapper {
   width: 100%;
   position: relative;
   display: flex;
   justify-content: center;
 }
 
-input {
+.header__input--search {
   width: 100%;
   background-color: #ffffff;
   border-radius: 20px;
@@ -169,11 +169,11 @@ input {
   transition: all 50ms ease;
 }
 
-input:focus {
+.header__input--search:focus {
   border: 2px solid #064e80;
 }
 
-.input__btn {
+.header__input--btn {
   width: 200px;
   margin-left: 20px;
   font-size: 40px;
@@ -190,11 +190,11 @@ input:focus {
   padding: 1px 6px;
 }
 
-button:hover {
+.header__input--btn:hover {
   background-color: #51bcda;
 }
 
-.input__btn--icon {
+.header__input--icon {
   width: 40px;
   height: 40px;
 }
@@ -218,13 +218,15 @@ MOBILE MENU
 .btn__menu {
   background-color: transparent;
   font-size: 40px;
+  text-align: center;
   border: none;
   color: #027d9f;
   display: none;
 }
 
 .menu__backdrop {
-  position: fixed;
+  /* position: fixed; */
+  position: absolute;
   background-color: #242424;
   top: 0;
   left: 0;
@@ -467,7 +469,8 @@ HEADER
   overflow: hidden;
 }
 
-input[type="text"] {
+/* Or input[type = "text"] */
+.form__control {
   color: rgba(0, 0, 0, 0.658);
   width: 100%;
   max-width: 800px;
@@ -477,7 +480,8 @@ input[type="text"] {
   opacity: 90%;
 }
 
-input[type="text"]:focus {
+/* Or input[type = "text"]:focus */
+.form__control:focus {
   --tw-border-opacity: 1;
   border-color: #ffffff;
   outline: solid 30px;
@@ -784,11 +788,11 @@ RESPONSIVENESS
     font-size: 26px;
   }
 
-  input {
+  .header__input--search {
     font-size: 18px;
   }
 
-  .input__btn {
+  .header__input--btn {
     font-size: 18px;
   }
 
@@ -836,24 +840,21 @@ RESPONSIVENESS
 
 /* SMALL PHONES, LARGE SMARTPHONES */
 @media (max-width: 550px) {
-  .input__wrapper {
+  .header__input--wrapper {
     flex-direction: column;
   }
 
-  .input__wrapper input {
+  .header__input--search {
     font-size: 16px;
     height: 60px;
     padding: 0 0 0 8px;
   }
 
-  .input__wrapper button {
+  .header__input--btn {
     max-width: none !important;
     width: 100%;
-    margin: 20px 0 0 0;
-  }
-
-  .input__btn {
     height: 58px;
+    margin: 20px 0 0 0;
   }
 
   .search__list .search__list--item {
