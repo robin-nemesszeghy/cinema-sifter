@@ -985,6 +985,10 @@ RESPONSIVENESS
     padding-top: 20px;
   }
 
+  .search__sort {
+    padding-top: 200px;
+  }
+
   #filter {
     max-width: 250px;
   }
