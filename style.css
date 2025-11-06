@@ -837,11 +837,11 @@ RESPONSIVENESS
   }
 }
 
-@media (max-width: 1600px) {
+/* @media (max-width: 1600px) {
   .search__sort {
     padding-top: 150px;
   }
-}
+} */
 
 /* LAPTOPS */
 @media (max-width: 1200px) {
