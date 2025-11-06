@@ -838,6 +838,8 @@ RESPONSIVENESS
 
   .search__results--title {
     color: #ffffff;
+    /* background-color: #4fb9d7;
+    border-radius: 200px; */
   }
 
   #filter {
@@ -968,6 +970,10 @@ RESPONSIVENESS
 
 /* SMALL PHONES */
 @media (max-width: 550px) {
+  .header__overlay {
+    height: 50vh;
+  }
+
   .film__header--title {
     font-size: 32px;
   }
