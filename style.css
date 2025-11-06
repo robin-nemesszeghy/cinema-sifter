@@ -832,8 +832,16 @@ RESPONSIVENESS
     padding-top: 80px;
   }
 
-  .search__sort {
+  /* .search__sort {
     padding-top: 200px;
+  } */
+
+  #filter {
+    color: #ffffff;
+  }
+
+  .search__results--title {
+    background-color: #ffffff;
   }
 }
 
