@@ -3,8 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flick Fetch</title>
+    <title>FlickFetch</title>
     <link rel="stylesheet" href="./style.css" />
+    <script
+      src="https://kit.fontawesome.com/2e2a207e73.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="./film.js" defer></script>
   </head>
 
@@ -31,83 +35,30 @@
               <button class=".button btn__clear" onclick="clearInput()">
                 CLEAR ALL
               </button>
-              <button class="btn__menu" onclick="openMenu()">
-                <i class="fa-solid fa-film" aria-hidden="true"></i>
-              </button>
-              <div class="menu__backdrop">
-                <button
-                  class="btn__menu btn__menu--close"
-                  onclick="closeMenu()"
-                >
-                  <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-                </button>
-                <ul class="menu__links">
-                  <li class="menu__list">
-                    <a href="#" class="menu__link" onclick="closeMenu()"
-                      >Home</a
-                    >
-                  </li>
-                  <li class="menu__list">
-                    <a
-                      href="./film.html"
-                      target="_blank"
-                      class="menu__link"
-                      onclick="closeMenu()"
-                      >Flick Fetch</a
-                    >
-                  </li>
-                  <li class="menu__list">
-                    <a href="#" class="menu__link" onclick="closeMenu()"
-                      >Contact</a
-                    >
-                  </li>
-                </ul>
-              </div>
             </div>
           </nav>
-          <div class="search__container">
-            <h1 class="film__header--title">Fetch your Flick</h1>
-            <select
-              id="filter"
-              onchange=""
-              class="filter__class"
-              onclick="clearInput()"
-            >
-              <option value="" selected="" disabled="" class="filter__option">
-                Click to Sort Your Flicks
-              </option>
-              <option value="Oldest_To_Newest" class="filter__option">
-                Oldest to Newest
-              </option>
-              <option value="Newest_To_Oldest" class="filter__option">
-                Newest to Oldest
-              </option>
-              <option value="A_To_Z" class="filter__option">
-                Alphabetically A -&gt; Z
-              </option>
-              <option value="Z_To_A" class="filter__option">
-                Alphabetically Z -&gt; A
-              </option>
-            </select>
-            <!-- search box -->
-            <div class="search__element">
-              <!-- (((search__element = "search-element"))) -->
-              <input
-                type="text"
-                class="form__control"
-                placeholder="Search Movie by Title..."
-                id="movie-search-box"
-                onkeyup="findMovies()"
-                onclick="findMovies()"
-              />
-              <div class="search__glass">
-                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-              </div>
+        </div>
+        <div class="search__container">
+          <h1 class="film__header--title">Fetch your Flick</h1>
+          <!-- search box -->
+          <div class="search__element">
+            <!-- (((search__element = "search-element"))) -->
+            <input
+              type="text"
+              class="form__control"
+              placeholder="Search Movie by Title..."
+              id="movie-search-box"
+              onkeyup="findMovies()"
+              onclick="findMovies()"
+            />
+            <div class="search__glass">
+              <i class="fa-solid fa-magnifying-glass"></i>
             </div>
-            <div class="list__container">
-              <div class="search__list" id="search-list">
-                <!-- list here -->
-                <!-- <div class = "search__list--item">
+          </div>
+          <div class="list__container">
+            <div class="search__list" id="search-list">
+              <!-- list here -->
+              <!-- <div class = "search__list--item">
                       <div class = "search__item--thumbnail">
                         <img src = "medium-cover.jpg">
                        </div>
@@ -116,19 +67,44 @@
                         <p>2017</p>
                       </div>
                 </div> -->
-              </div>
-              <!-- end of search box -->
             </div>
-            <div class="header__overlay"></div>
+            <!-- end of search box -->
           </div>
+          <div class="header__overlay"></div>
         </div>
       </div>
+    </div>
 
-      <div class="movies__container">
-        <div class="result__container">
-          <div id="result-grid">
-            <!-- movie information here -->
-            <!-- <div class = "movie-poster">
+    <div class="movies__container">
+      <div class="search__sort">
+        <h3 class="search__results--title">Search Results:</h3>
+        <select
+          id="filter"
+          onchange=""
+          class="filter__class"
+          onclick="clearInput()"
+        >
+          <option value="" selected="" disabled="" class="filter__option">
+            Click to Sort Your Flicks
+          </option>
+          <option value="Oldest_To_Newest" class="filter__option">
+            Oldest to Newest
+          </option>
+          <option value="Newest_To_Oldest" class="filter__option">
+            Newest to Oldest
+          </option>
+          <option value="A_To_Z" class="filter__option">
+            Alphabetically A -&gt; Z
+          </option>
+          <option value="Z_To_A" class="filter__option">
+            Alphabetically Z -&gt; A
+          </option>
+        </select>
+      </div>
+      <div class="result__container">
+        <div id="result-grid">
+          <!-- movie information here -->
+          <!-- <div class = "movie-poster">
                         <img src = "medium-cover.jpg" alt = "movie poster">
                     </div>
                     <div class = "movie-info">
@@ -145,7 +121,6 @@
                         <p class = "language"><b>Language:</b> English</p>
                         <p class = "awards"><b><i class = "fas fa-award"></i></b> Nominated for 1 Oscar</p>
                     </div> -->
-          </div>
         </div>
       </div>
     </div>
