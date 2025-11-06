@@ -826,6 +826,17 @@ RESPONSIVENESS
 
 */
 
+/* LARGE SCREENS, DESKTOPS, LARGE TVS */
+@media (min-width: 1540px) and (max-width: 1920px) {
+  header {
+    padding-top: 80px;
+  }
+
+  .search__list {
+    padding-top: 200px;
+  }
+}
+
 /* LAPTOPS */
 @media (max-width: 1200px) {
   .search__list .search__list--item {
@@ -944,5 +955,25 @@ RESPONSIVENESS
 
   .movie__title {
     text-align: center;
+  }
+}
+
+/* SMALL PHONES */
+@media (max-width: 550px) {
+  .film__header--title {
+    font-size: 32px;
+  }
+
+  .nav__container {
+    flex-direction: column;
+    padding-top: 20px;
+  }
+
+  #filter {
+    max-width: 250px;
+  }
+
+  .form__control::placeholder {
+    font-size: 16px;
   }
 }
