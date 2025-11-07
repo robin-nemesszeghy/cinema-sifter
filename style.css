@@ -455,7 +455,7 @@ HEADER
   --tw-border-opacity: 1;
   border-color: #027d9f;
   --tw-bg-opacity: 1;
-  background-color: #ff0000;
+  background-color: #ee3390;
   --tw-text-opacity: 1;
   color: #ffffff;
   font-weight: 900;
@@ -540,7 +540,7 @@ HEADER
   display: flex;
   align-items: center;
   justify-content: center;
-  /* cursor: none; */
+  cursor: pointer;
   top: 0;
   bottom: 0;
   right: 0;
@@ -549,6 +549,10 @@ HEADER
   color: #027d9f;
   font-size: 32px;
   transition: all 0.2s ease;
+}
+
+.fa-magnifying-glass:hover {
+  color: #ee3390;
 }
 
 /* 
@@ -577,6 +581,21 @@ SEARCH RESULTS
   padding: 8px;
   background-color: rgba(47, 89, 99, 0.3);
   border-radius: 5px;
+}
+
+.spinner-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 200px;
+  padding: 20px;
+}
+
+.spinner-content .spinner-icon {
+  font-size: 52px;
+  color: #027d9f;
+  animation: spin 1s infinite linear;
 }
 
 /* 

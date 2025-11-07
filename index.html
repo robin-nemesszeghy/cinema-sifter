@@ -42,7 +42,14 @@
                 >FlickFetch</a
               >
             </li>
-            <li><a class="nav__link nav__link--btn" href="#">CONTACT</a></li>
+            <li>
+              <a
+                class="nav__link nav__link--btn"
+                href="#"
+                onclick="showContactAlert()"
+                >CONTACT</a
+              >
+            </li>
           </ul>
           <button class="btn__menu" onclick="openMenu()">
             <i class="fa-solid fa-film"></i>
@@ -63,7 +70,12 @@
                 >
               </li>
               <li class="menu__list">
-                <a href="#" class="menu__link" onclick="closeMenu()">Contact</a>
+                <a
+                  href="#"
+                  class="menu__link"
+                  onclick="closeMenu(); showContactAlert()"
+                  >Contact</a
+                >
               </li>
             </ul>
           </div>

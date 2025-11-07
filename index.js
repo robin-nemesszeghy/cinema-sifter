@@ -16,3 +16,7 @@ function searchPending() {
     success.classList += " btn__overlay--visible";
   }, 1000);
 }
+
+function showContactAlert() {
+  alert("This feature has not been implemented.");
+}

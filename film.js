@@ -5,50 +5,94 @@ const movieSearchBox = document.getElementById("movie-search-box");
 const searchList = document.getElementById("search-list");
 const resultGrid = document.getElementById("result-grid");
 
+let searchTimeoutToken = null;
 let currentMovies = [];
+
+const spinnerHTML = `
+  <div class="spinner-content">
+    <i class="fas fa-spinner fa-spin spinner-icon"></i>
+  </div>
+`;
+
+function showSpinner() {
+  if (searchList) {
+    // Only inject spinner HTML if it's not already present (to avoid flickering)
+    if (!searchList.querySelector(".spinner-content")) {
+      searchList.innerHTML = spinnerHTML;
+    }
+    searchList.classList.remove("hide__search--list");
+    if (resultGrid) {
+      resultGrid.style.display = "none";
+    }
+  }
+}
 
 // Fetch flicks (movies) from API and load them
 async function loadMovies(searchTerm) {
+  // The spinner is already visible due to showSpinner() being called in findMovies()
+
   const getMovie = await fetch(
     `https://omdbapi.com/?s=${searchTerm}&page=1&apikey=28f9634c`
   );
   const data = await getMovie.json();
-  // console.log(data.Search);
-  if (data.Response == "True") {
+
+  // If the API returns movies, display them
+  if (data.Response === "True" && data.Search && data.Search.length > 0) {
     currentMovies = data.Search; // Store movies globally
+    displayMovieList(data.Search); // Clear the spinner and display results
+  } else {
+    // Ensure filtering won't happen on old data
+    currentMovies = [];
+    // Ensure the searchList container remains visible to display the spinning spinner
     searchList.classList.remove("hide__search--list");
-    displayMovieList(data.Search);
+    // Spinner keeps spinning until the search is "complete" (i.e. user finishes typing in the search bar)
   }
 }
 
-// To have something displayed as the user types in the search bar; nothing is displayed by default because of hide__search--list
+// To have something displayed as the user types in the search bar
 function findMovies() {
   // Null check to prevent error
   if (!movieSearchBox) return;
 
   let searchTerm = movieSearchBox.value.trim();
+
+  // Clear any existing timeout to prevent multiple rapid API calls
+  if (searchTimeoutToken) {
+    clearTimeout(searchTimeoutToken);
+  }
+
   if (searchTerm.length > 0) {
-    // This displays movies when you first type because otherwise, the default is display:none on hide__search--list
-    // searchList.classList.remove("hide__search--list");
-    loadMovies(searchTerm);
+    showSpinner(); // Immediately show spinner when user starts typing
+
+    // Set a new timeout to fetch movies after a short delay (100ms)
+    // The API call will only happen if the user pauses typing for 100ms
+    searchTimeoutToken = setTimeout(() => {
+      loadMovies(searchTerm);
+    }, 100);
   } else {
-    // This displays none again if the user hasn't typed anything in the search bar or deleted what they typed (searchTerm is null)
+    // If search term is empty, clear everything and hide the search list
+    searchList.innerHTML = ""; // Remove spinner or previous results
     searchList.classList.add("hide__search--list");
+    if (resultGrid) {
+      // Only show resultGrid if it actually contains a detailed movie
+    }
+    currentMovies = []; // Clear current movies cache
   }
 }
 
 // The list of movies displayed from the user's search
 function displayMovieList(movies) {
-  // Null check to prevent error
   if (!searchList) return;
 
-  searchList.innerHTML = "";
+  searchList.innerHTML = ""; // Clears the spinner (or any previous content)
+  searchList.classList.remove("hide__search--list");
+
   for (let movieId = 0; movieId < movies.length; movieId++) {
     let movieListItem = document.createElement("div");
-    movieListItem.dataset.id = movies[movieId].imdbID; // Setting the movie id in the data id
+    movieListItem.dataset.id = movies[movieId].imdbID;
     movieListItem.classList.add("search__list--item");
     let moviePoster =
-      movies[movieId].Poster != "N/A"
+      movies[movieId].Poster !== "N/A"
         ? movies[movieId].Poster
         : "image_not_found.png";
 
@@ -63,38 +107,17 @@ function displayMovieList(movies) {
         `;
     searchList.appendChild(movieListItem);
   }
-  loadMovieDetails();
-}
-
-function loadMovieDetails() {
-  // Null check to prevent error
-  if (!searchList) return;
-
-  const searchListMovies = searchList.querySelectorAll(".search__list--item");
-  searchListMovies.forEach((movie) => {
-    movie.addEventListener("click", async () => {
-      // console.log(movie.dataset.id);
-      searchList.classList.add("hide__search--list");
-      movieSearchBox.value = "";
-      const result = await fetch(
-        `https://www.omdbapi.com/?i=${movie.dataset.id}&apikey=28f9634c`
-      );
-      const movieDetails = await result.json();
-      // console.log(movieDetails);
-      displayMovieDetails(movieDetails);
-    });
-  });
+  loadMovieDetails(); // Attach event listeners to the new movie items
 }
 
 function displayMovieDetails(details) {
-  // Null check to prevent error
   if (!resultGrid) return;
 
   resultGrid.innerHTML = `
     <div class = "result__grid">
       <div class = "movie-poster">
         <img src = "${
-          details.Poster != "N/A" ? details.Poster : "image_not_found.png"
+          details.Poster !== "N/A" ? details.Poster : "image_not_found.png"
         }" alt = "movie poster">
       </div>
       <div class = "movie__info">
@@ -115,34 +138,92 @@ function displayMovieDetails(details) {
       </div>
     </div>
     `;
+  resultGrid.style.display = "block"; // Show the detailed movie grid
 }
 
+function loadMovieDetails() {
+  if (!searchList) return;
+
+  const searchListMovies = searchList.querySelectorAll(".search__list--item");
+  searchListMovies.forEach((movie) => {
+    movie.addEventListener("click", async () => {
+      searchList.classList.add("hide__search--list");
+      searchList.innerHTML = "";
+      movieSearchBox.value = "";
+      // Clear any pending search timeout when a selection is made
+      if (searchTimeoutToken) {
+        clearTimeout(searchTimeoutToken);
+      }
+      currentMovies = []; // Clear current movies as detailed view is visible
+
+      const result = await fetch(
+        `https://www.omdbapi.com/?i=${movie.dataset.id}&apikey=28f9634c`
+      );
+      const movieDetails = await result.json();
+      displayMovieDetails(movieDetails);
+    });
+  });
+}
+
+// Global click listener to hide search results when clicking outside
 window.addEventListener("click", (event) => {
-  if (
-    event.target.className != "form__control" &&
-    event.target.className != "filter__option" &&
-    event.target.className != "filter__class"
-  ) {
-    searchList.classList.add("hide__search--list");
+  const isClickInsideSearchArea =
+    (movieSearchBox && movieSearchBox.contains(event.target)) ||
+    (searchList && searchList.contains(event.target)) ||
+    event.target.classList.contains("filter__option") ||
+    event.target.classList.contains("filter__class");
+
+  if (!isClickInsideSearchArea) {
+    if (searchList) {
+      searchList.classList.add("hide__search--list");
+      searchList.innerHTML = "";
+    }
+    if (movieSearchBox) {
+      movieSearchBox.value = "";
+    }
+    currentMovies = [];
+    if (searchTimeoutToken) {
+      clearTimeout(searchTimeoutToken);
+    }
   }
 });
 
-// Hides movie result so movie search can display over it
-const hideResultGrid = document.getElementById("result-grid");
 const searchFocus = document.getElementById("movie-search-box");
 
-searchFocus.addEventListener("focus", () => {
-  hideResultGrid.style.display = "none";
-});
+if (searchFocus) {
+  searchFocus.addEventListener("focus", () => {
+    if (resultGrid) {
+      resultGrid.style.display = "none"; // Always hide detailed view when search box is focused
+    }
+    // If there's content in the search box, re-trigger findMovies to show either the spinner or results
+    if (movieSearchBox.value.trim().length > 0) {
+      findMovies();
+    } else {
+      if (searchList) {
+        searchList.classList.add("hide__search--list");
+        searchList.innerHTML = "";
+      }
+      currentMovies = [];
+    }
+  });
+}
 
-searchFocus.addEventListener("blur", () => {
-  hideResultGrid.style.display = "block";
-});
-
-// Reset button will clear the search
+// Reset button clears the search
 function clearInput() {
-  document.getElementById("result-grid").style.display = "none";
-  document.getElementsByClassName("search__list--item").style.display = "none";
+  if (resultGrid) {
+    resultGrid.style.display = "none";
+  }
+  if (searchList) {
+    searchList.innerHTML = "";
+    searchList.classList.add("hide__search--list");
+  }
+  if (movieSearchBox) {
+    movieSearchBox.value = "";
+  }
+  currentMovies = [];
+  if (searchTimeoutToken) {
+    clearTimeout(searchTimeoutToken);
+  }
 }
 
 function filterMovies(event) {
@@ -153,9 +234,16 @@ function filterMovies(event) {
 function renderMovies(filter) {
   const moviesArray = currentMovies;
 
-  if (!moviesArray) return;
+  if (!moviesArray || moviesArray.length === 0) {
+    searchList.innerHTML =
+      '<div class="spinner-content">No movies to sort. Please perform a search first.</div>';
+    searchList.classList.remove("hide__search--list");
+    return;
+  }
 
-  // Clone array to avoid mutating original data
+  searchList.innerHTML = "";
+  searchList.classList.remove("hide__search--list");
+
   let sortedArray = [...moviesArray];
 
   if (filter === "Oldest_To_Newest") {
@@ -168,27 +256,5 @@ function renderMovies(filter) {
     sortedArray.sort((a, b) => b.Title.localeCompare(a.Title));
   }
 
-  // Clear previous results
-  searchList.innerHTML = "";
-
-  // Append and render sorted movies
-  sortedArray.forEach((movie) => {
-    let movieItem = document.createElement("div");
-    movieItem.className = "search__list--item";
-    movieItem.dataset.id = movie.imdbID;
-    let poster = movie.Poster != "N/A" ? movie.Poster : "image_not_found.png";
-
-    movieItem.innerHTML = `
-      <div class="search__item--thumbnail">
-        <img src="${poster}">
-      </div>
-      <div class="search__item--info">
-        <h3>${movie.Title}</h3>
-        <p>${movie.Year}</p>
-      </div>
-    `;
-    searchList.appendChild(movieItem);
-  });
-
-  loadMovieDetails(); // reattach event handlers if needed
+  displayMovieList(sortedArray); // Re-render the list with sorted movies
 }
